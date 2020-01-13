@@ -135,6 +135,7 @@ namespace UnitSense.CacheManagement
                 }
 
                 if (!item.Value.IsExpired()) return item.Value.Item;
+                
                 dic.Remove(itemKey, out _);
                 return default(T);
             }

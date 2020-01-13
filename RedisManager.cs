@@ -15,19 +15,20 @@ namespace UnitSense.CacheManagement
             clientsManager = ConnectionMultiplexer.Connect(config);
         }
 
-        public static ConfigurationOptions GetOptions(string host, string password, int port)
+        public static ConfigurationOptions GetOptions(string host, string password, int port, int? dbIndex =  null)
         {
             return  new ConfigurationOptions()
             {
                 Password = password,
                 EndPoints = { { host, port } },
-                ConnectTimeout = 60000
+                ConnectTimeout = 60000,
+                DefaultDatabase = dbIndex
             };
         }
         public static ConnectionMultiplexer GetClientManager()
         {
             if (redisConfig == null || clientsManager == null)
-                throw new AccessViolationException("Not initialized. Please call Initiliaze before any operations.");
+                throw new AccessViolationException("Not initialized. Please call Initialize before any operations.");
 
             return clientsManager;
         }
