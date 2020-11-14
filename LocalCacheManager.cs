@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -83,9 +84,9 @@ namespace UnitSense.CacheManagement
 
         public T GetOrStore<T>(string hashsetKey, string hashfieldKey, Func<T> DataRetrievalMethod, TimeSpan? ttl)
         {
-            Dictionary<string, MemoryHashSetItem<T>> hashSetDictionary =
-                myCache.Get<Dictionary<string, MemoryHashSetItem<T>>>(hashsetKey) ??
-                new Dictionary<string, MemoryHashSetItem<T>>();
+            ConcurrentDictionary<string, MemoryHashSetItem<T>> hashSetDictionary =
+                myCache.Get<ConcurrentDictionary<string, MemoryHashSetItem<T>>>(hashsetKey) ??
+                new ConcurrentDictionary<string, MemoryHashSetItem<T>>();
             MemoryHashSetItem<T> item = hashSetDictionary.Where(x => x.Key == hashfieldKey).Select(x => x.Value)
                 .FirstOrDefault();
             if (item == null || item.IsExpired())
@@ -97,7 +98,7 @@ namespace UnitSense.CacheManagement
                     Item = data,
                     TimeToLive = ttl.GetValueOrDefault(TimeSpan.FromMinutes(1))
                 };
-                hashSetDictionary.Add(hashfieldKey, item);
+                hashSetDictionary.TryAdd(hashfieldKey, item);
                 myCache.Set(hashsetKey, hashSetDictionary, TimeSpan.FromHours(1));
             }
 
@@ -125,9 +126,10 @@ namespace UnitSense.CacheManagement
 
             try
             {
-                var dic = myCache.Get<Dictionary<string, MemoryHashSetItem<T>>>(hashsetKey);
+                var dic = myCache.Get<ConcurrentDictionary<string, MemoryHashSetItem<T>>>(hashsetKey);
                 if (dic == null)
                     return default(T);
+               
                 var item = dic.FirstOrDefault(x => x.Key == itemKey);
                 if (item.Value == null)
                 {
@@ -150,8 +152,8 @@ namespace UnitSense.CacheManagement
            // _readerWriterLockSlim.EnterWriteLock();
             try
             {
-                var dic = myCache.Get<Dictionary<string, MemoryHashSetItem<T>>>(hashsetKey) ??
-                          new Dictionary<string, MemoryHashSetItem<T>>();
+                var dic = myCache.Get<ConcurrentDictionary<string, MemoryHashSetItem<T>>>(hashsetKey) ??
+                          new ConcurrentDictionary<string, MemoryHashSetItem<T>>();
 
                 if (!dic.ContainsKey(itemKey))
                     dic.TryAdd(itemKey,
