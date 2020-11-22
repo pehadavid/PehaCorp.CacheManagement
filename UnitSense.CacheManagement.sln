@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitSense.CacheManagement", "UnitSense.CacheManagement\UnitSense.CacheManagement.csproj", "{65D27ECE-95AC-4673-AA1E-0A13D65305F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitSense.CacheManagment.Tests", "Test\UnitSense.CacheManagment.Tests\UnitSense.CacheManagment.Tests.csproj", "{69880F93-DF23-4BF2-AD92-752572DC422A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65D27ECE-95AC-4673-AA1E-0A13D65305F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65D27ECE-95AC-4673-AA1E-0A13D65305F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65D27ECE-95AC-4673-AA1E-0A13D65305F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65D27ECE-95AC-4673-AA1E-0A13D65305F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69880F93-DF23-4BF2-AD92-752572DC422A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69880F93-DF23-4BF2-AD92-752572DC422A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69880F93-DF23-4BF2-AD92-752572DC422A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69880F93-DF23-4BF2-AD92-752572DC422A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51682445-739B-4A9E-B88B-3B199B992440}
+	EndGlobalSection
+EndGlobal

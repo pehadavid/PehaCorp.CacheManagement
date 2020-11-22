@@ -84,25 +84,9 @@ namespace UnitSense.CacheManagement
 
         public T GetOrStore<T>(string hashsetKey, string hashfieldKey, Func<T> DataRetrievalMethod, TimeSpan? ttl)
         {
-            ConcurrentDictionary<string, MemoryHashSetItem<T>> hashSetDictionary =
-                myCache.Get<ConcurrentDictionary<string, MemoryHashSetItem<T>>>(hashsetKey) ??
-                new ConcurrentDictionary<string, MemoryHashSetItem<T>>();
-            MemoryHashSetItem<T> item = hashSetDictionary.Where(x => x.Key == hashfieldKey).Select(x => x.Value)
-                .FirstOrDefault();
-            if (item == null || item.IsExpired())
-            {
-                var data = DataRetrievalMethod.Invoke();
-                item = new MemoryHashSetItem<T>()
-                {
-                    DateCreated = DateTime.UtcNow,
-                    Item = data,
-                    TimeToLive = ttl.GetValueOrDefault(TimeSpan.FromMinutes(1))
-                };
-                hashSetDictionary.TryAdd(hashfieldKey, item);
-                myCache.Set(hashsetKey, hashSetDictionary, TimeSpan.FromHours(1));
-            }
-
-            return item.Item;
+            var internalKey = MorphToInternalHashetKey(hashsetKey, hashfieldKey);
+            return GetOrStore<T>(internalKey, DataRetrievalMethod, ttl);
+       
         }
 
         public Task<T> GetOrStoreAsync<T>(string key, Func<Task<T>> dataRetrievalMethodAsync, TimeSpan? timeToLive)
@@ -126,20 +110,9 @@ namespace UnitSense.CacheManagement
 
             try
             {
-                var dic = myCache.Get<ConcurrentDictionary<string, MemoryHashSetItem<T>>>(hashsetKey);
-                if (dic == null)
-                    return default(T);
-               
-                var item = dic.FirstOrDefault(x => x.Key == itemKey);
-                if (item.Value == null)
-                {
-                    return default(T);
-                }
-
-                if (!item.Value.IsExpired()) return item.Value.Item;
-                
-                dic.Remove(itemKey, out _);
-                return default(T);
+                string internalKey = MorphToInternalHashetKey(hashsetKey, itemKey);
+                GetByKey<T>(internalKey, out T item);
+                return item;
             }
             finally
             {
@@ -149,27 +122,25 @@ namespace UnitSense.CacheManagement
 
         public void HashSetByKey<T>(string hashsetKey, string itemKey, T item)
         {
-           // _readerWriterLockSlim.EnterWriteLock();
+      
             try
             {
-                var dic = myCache.Get<ConcurrentDictionary<string, MemoryHashSetItem<T>>>(hashsetKey) ??
-                          new ConcurrentDictionary<string, MemoryHashSetItem<T>>();
-
-                if (!dic.ContainsKey(itemKey))
-                    dic.TryAdd(itemKey,
-                        new MemoryHashSetItem<T>()
-                            {DateCreated = DateTime.UtcNow, TimeToLive = TimeSpan.FromMinutes(1), Item = item});
-                myCache.Set(hashsetKey, dic);
+                var internalKey = MorphToInternalHashetKey(hashsetKey, itemKey);
+                SetValue(internalKey, item, TimeSpan.FromMinutes(1));
             }
             finally
             {
-             //   _readerWriterLockSlim.ExitWriteLock();
+         
             }
         }
 
         public void DeleteHashSet(string hashsetKey)
         {
-            myCache.Remove(hashsetKey);
+            var keys = myCache.GetKeys<string>().Where(x => x.StartsWith(HsToken)).ToList();
+            foreach (string key in keys)
+            {
+                myCache.Remove(key);
+            }
 
         }
 
@@ -184,18 +155,14 @@ namespace UnitSense.CacheManagement
         {
             myCache.Set(key, value, ttl.GetValueOrDefault(TimeSpan.FromMinutes(5)));
         }
-    }
 
-    public class MemoryHashSetItem<T>
-    {
-        public T Item { get; set; }
-        public TimeSpan TimeToLive { get; set; }
-        public DateTime DateCreated { get; set; }
-
-        public bool IsExpired()
+        private string MorphToInternalHashetKey(string hsKey, string itemKey)
         {
-            var ceilData = DateCreated.Add(TimeToLive);
-            return ceilData < DateTime.UtcNow;
+            return $"{HsToken}{hsKey}-{itemKey}";
         }
+
+        private string HsToken => "__UnitSense.CacheManagement.HashSet-";
     }
+
+
 }
