@@ -1,7 +1,7 @@
 using System;
 using StackExchange.Redis;
 
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     public static class RedisManager
     {

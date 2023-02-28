@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnitSense.CacheManagement;
+using PehaCorp.CacheManagement;
 using Xunit;
 
 namespace UnitSense.CacheManagment.Tests

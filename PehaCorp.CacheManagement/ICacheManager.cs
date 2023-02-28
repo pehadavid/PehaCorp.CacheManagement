@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     /// <summary>
     /// Interface de Gestion complète d'un système de cache
     /// </summary>
     public interface ICacheManager
     {
-        /// <summary>
-        /// Rapatrie un objet du cache, en utilisant la clé donnée
-        /// </summary>
-        /// <param name="key">Clé de l'objet</param>
-        /// <param name="value">Référence de l'objet</param>
-        /// <returns>Succés de l'opération</returns>
-        bool GetByKey(string key, out object value);
 
         /// <summary>
         /// Enregistre un objet dans le cache

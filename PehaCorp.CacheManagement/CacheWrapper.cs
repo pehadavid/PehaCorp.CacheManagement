@@ -1,4 +1,4 @@
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     public class CacheWrapper<T>
     {

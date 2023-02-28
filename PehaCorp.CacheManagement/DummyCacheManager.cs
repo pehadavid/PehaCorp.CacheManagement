@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     namespace IMG.CacheManagement
     {

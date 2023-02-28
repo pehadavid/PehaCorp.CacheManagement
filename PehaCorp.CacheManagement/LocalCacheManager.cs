@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     /// <summary>
     /// Utilise le cache local ASP.NET

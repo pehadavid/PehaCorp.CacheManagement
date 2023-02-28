@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     public class RedisBusHandler
     {
@@ -43,7 +43,7 @@ namespace UnitSense.CacheManagement
             {
                 Debug.WriteLine($"data received from subscriber");
 
-                var item = JsonConvert.DeserializeObject<BroadcastItem>(value,
+                var item = JsonSerializer.Deserialize<BroadcastItem>(value,
                     RedisCacheManager.GetJsonSerializerSettings());
                 OnRedisReceive(new RedisReceivedHandlerArgs() {BroadcastItem = item});
                 //TODO : perform some DateTime check to avoid outdated objects

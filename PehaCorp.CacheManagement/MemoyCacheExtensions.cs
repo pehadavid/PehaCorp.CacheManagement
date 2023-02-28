@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace UnitSense.CacheManagement
+namespace PehaCorp.CacheManagement
 {
     public static class MemoryCacheExtensions
     {

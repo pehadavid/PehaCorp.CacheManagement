@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net70</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>PehaCorp.CacheManagment.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\UnitSense.CacheManagement.csproj" />
-    <ProjectReference Include="..\..\UnitSense.CacheManagement\UnitSense.CacheManagement.csproj" />
+    <ProjectReference Include="..\..\PehaCorp.CacheManagement\PehaCorp.CacheManagement.csproj" />
   </ItemGroup>
 
 </Project>
